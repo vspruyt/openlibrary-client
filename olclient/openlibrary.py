@@ -14,6 +14,7 @@ from urllib.request import pathname2url
 import backoff
 import requests
 from requests import Response
+from requests import exceptions
 
 from olclient import common
 from olclient.config import Config
@@ -51,7 +52,7 @@ class OpenLibrary:
     VALID_IDS = ['isbn_10', 'isbn_13', 'lccn', 'ocaid']
     BACKOFF_KWARGS = {
         'wait_gen': backoff.expo,
-        'exception': requests.exceptions.RequestException,
+        'exception': exceptions.RequestException,
         'giveup': lambda e: hasattr(e.response, 'status_code')
         and 400 <= e.response.status_code < 500,
         'max_tries': 5,
